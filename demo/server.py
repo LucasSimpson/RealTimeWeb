@@ -1,15 +1,13 @@
-from realtimeweb.baseserver import BaseServer
+from realtimeweb import ConnectionHandler, BaseServer
 
 
-class DemoServer(BaseServer):
-    def new_connection_signal(self, id):
-        # TODO send init stuff
-        pass
+class DemoConnectionHandler(ConnectionHandler):
 
-    async def handle_message(self, id, message):
-        await self.broadcast_all(message)
+    async def handle_message(self, message: str) -> None:
+        await self.controller.broadcast_all(message)
 
 
 def run():
-    server = DemoServer('localhost', 8000)
+    server = BaseServer('localhost', 8000)
+    server.set_connetion_handler_class(DemoConnectionHandler)
     server.start()
