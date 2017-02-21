@@ -1,7 +1,7 @@
-from realtimeweb import ConnectionHandler, BaseServer
+from realtimeweb import BaseConnectionHandler, BaseServer
 
 
-class DemoConnectionHandler(ConnectionHandler):
+class DemoConnectionHandler(BaseConnectionHandler):
 
     async def handle_message(self, message: str) -> None:
         await self.controller.broadcast_all(message)
