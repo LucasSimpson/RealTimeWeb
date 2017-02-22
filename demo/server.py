@@ -1,8 +1,8 @@
-from realtimeweb import BaseConnectionHandler, BaseServer
+from realtimeweb import BaseServer
+from realtimeweb.room_connection_handler import RoomConnectionHandler
 
 
-class DemoConnectionHandler(BaseConnectionHandler):
-
+class DemoConnectionHandler(RoomConnectionHandler):
     async def handle_message(self, message: str) -> None:
         await self.controller.broadcast_all(message)
 

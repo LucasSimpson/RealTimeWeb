@@ -2,7 +2,15 @@
  * Created by Lucas on 2017-02-16.
  */
 
+
+
+
 $(function() {
+
+    var chat_rooms = $('#chat-rooms');
+    var b_submit = $("#submit");
+    var f_message = $("#message");
+    var chat_log = $('#chat-log');
 
     console.log('Working');
 
@@ -10,19 +18,24 @@ $(function() {
 
     socket.onopen = function (event) {
 
-
         socket.onmessage = function(event) {
-            console.log(event);
+            var data = JSON.parse(event.data);
+            console.log(data);
 
-            var dom = $("#chatlog");
+            if ("rooms" in data) {
+                for (i in data.rooms) {
+                    console.log(data.rooms[i]);
+                    chat_rooms.append("<button>Join Chat Room #" + data.rooms[i].id + "</button>");
+                }
+            }
 
-            dom.text(dom.text() + '  ' + event.data);
+            chat_log.text(chat_log.text() + '  ' + event.data);
         };
     };
 
-    $("#submit").click(function() {
-        var text = $("#message").val();
-        $("#message").val('');
+    b_submit.click(function() {
+        var text = f_message.val();
+        f_message.val('');
 
         console.log('text is ' + text);
 

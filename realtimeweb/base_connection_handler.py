@@ -9,8 +9,9 @@ class BaseConnectionHandler:
     Public Methods:
         listen()
         push()
-        handle_message()
-        on_close()
+        handle_message() -- Overriden by subclass
+        on_connected() -- Overriden by subclass
+        on_close() -- Overriden by subclass
     """
 
     def __init__(self, controller: Any, id: int, websocket: websockets.WebSocketServerProtocol):
@@ -30,6 +31,9 @@ class BaseConnectionHandler:
         """Listen for incoming messages from client."""
 
         print('{} opened'.format(self))
+
+        await self.on_connected()
+
         while True:
             try:
                 message = await self.websocket.recv()
@@ -43,10 +47,19 @@ class BaseConnectionHandler:
 
         await self.websocket.send(message)
 
-    def handle_message(self, message: str) -> None:
+    async def handle_message(self, message: str) -> None:
         """Called when a message has been received by client.
 
         This method is meant to be overriden by subclass.
+        """
+
+        pass
+
+    async def on_connected(self):
+        """Called when the connection is first created.
+
+        The actual websocket has just been connected, any sort of initial data transfer should
+        happen here. This methos is meant to be overriden by subclass.
         """
 
         pass
@@ -67,4 +80,4 @@ class BaseConnectionHandler:
         return self.__hash__() == other.__hash__()
 
     def __str__(self):
-        return 'Conn {}'.format(self.id)
+        return 'Conn#{}'.format(self.id)

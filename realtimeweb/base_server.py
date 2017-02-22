@@ -46,9 +46,10 @@ class BaseServer:
     def _close(self, connection: BaseConnectionHandler) -> None:
         """Close a given connection."""
 
-        print('Closing {}'.format(self))
+        print('Closing {}'.format(connection))
         connection.on_close()
-        del self.connections[connection.id]
+        self.connections = self.connections - set([connection])
+        # del self.connections[connection.id]
 
     async def _serve(self, websocket: websockets.WebSocketServerProtocol, path: str) -> None:
         """Serve a given websocket."""
